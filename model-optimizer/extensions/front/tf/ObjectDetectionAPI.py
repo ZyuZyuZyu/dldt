@@ -180,8 +180,6 @@ def _create_prior_boxes_node(graph: nx.MultiDiGraph, pipeline_config: PipelineCo
     :param pipeline_config: PipelineConfig object with parsed values.
     :return: node generating prior boxes.
     """
-    min_scale = pipeline_config.get_param('ssd_anchor_generator_min_scale')
-    max_scale = pipeline_config.get_param('ssd_anchor_generator_max_scale')
     num_layers = pipeline_config.get_param('ssd_anchor_generator_num_layers')
     aspect_ratios = pipeline_config.get_param('ssd_anchor_generator_aspect_ratios')
     # prior boxes have to be generated using the image size used for training
@@ -196,7 +194,14 @@ def _create_prior_boxes_node(graph: nx.MultiDiGraph, pipeline_config: PipelineCo
     if pipeline_config.get_param('ssd_anchor_generator_reduce_lowest') is not None:
         reduce_boxes_in_lowest_layer = pipeline_config.get_param('ssd_anchor_generator_reduce_lowest')
 
-    scales = [min_scale + (max_scale - min_scale) * i / (num_layers - 1) for i in range(num_layers)] + [1.0]
+    scales = pipeline_config.get_param('ssd_anchor_generator_scales')
+    if scales is not None:
+        scales = scales + [1.0]
+    else:
+        min_scale = pipeline_config.get_param('ssd_anchor_generator_min_scale')
+        max_scale = pipeline_config.get_param('ssd_anchor_generator_max_scale')
+        scales = [min_scale + (max_scale - min_scale) * i / (num_layers - 1) for i in range(num_layers)] + [1.0]
+    
     prior_box_nodes = []
     for ssd_head_ind in range(num_layers):
         ssd_head_node = _find_ssd_head_node(graph, ssd_head_ind, 'box')

@@ -48,6 +48,7 @@ mapping_rules = [
     # SSD anchor generator attributes
     ('ssd_anchor_generator_min_scale', 'anchor_generator/ssd_anchor_generator/min_scale'),
     ('ssd_anchor_generator_max_scale', 'anchor_generator/ssd_anchor_generator/max_scale'),
+    ('ssd_anchor_generator_scales', 'anchor_generator/ssd_anchor_generator/scales'),
     ('ssd_anchor_generator_num_layers', 'anchor_generator/ssd_anchor_generator/num_layers'),
     ('ssd_anchor_generator_aspect_ratios', 'anchor_generator/ssd_anchor_generator/aspect_ratios'),
     ('ssd_anchor_generator_reduce_lowest', 'anchor_generator/ssd_anchor_generator/reduce_boxes_in_lowest_layer'),
